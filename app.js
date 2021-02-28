@@ -1,14 +1,12 @@
+const { once } = require('events')
 const express = require('express')
 const app = express()
 
-app.get('/', (req, res) => {
-  res.send('<h1>Pub Quiz Coming Soon!</h1>')
-})
+app.get('/', (_, res) => res.send('<h1>Coming Soon!</h1>'))
 
 module.exports = {
-  listen(port) {
-    return new Promise(resolve => {
-      const server = app.listen(port, function () { resolve(server) })
-    })
+  name: '🍺 Pub Quiz',
+  async listen(port) {
+    await once(app.listen(port), 'listening')
   }
 }
