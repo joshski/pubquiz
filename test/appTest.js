@@ -1,20 +1,14 @@
 const assert = require('assert')
-const fetch = require('node-fetch')
 const app = require('../app')
 
+const TestServer = require('../TestServer')
+
 describe('app', function() {
-  let server
-
-  before(async function stopServer() {
-    server = await app.listen(8181)
-  })
-
-  after(async function stopServer() {
-    if (server) server.close()
-  })
-
+  beforeEach(async function () { this.server = await TestServer.start(app) })
+  afterEach(async function () { await this.server.stop() })
+  
   it('responds to HTTP requests', async function() {
-    const response = await fetch('http://127.0.0.1:8181')
+    const response = await this.server.fetch('/')
     assert.strictEqual(await response.text(), '<h1>Coming Soon!</h1>')
   })
 })

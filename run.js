@@ -1,24 +1,23 @@
 const startedAt = new Date()
 
 const Mocha = require('mocha')
-const app = require('./app')
 const fs = require('fs')
+const { argv } = require('process')
 
+const app = require('./app')
 const colors = { cyan: "\x1b[36m", green: "\x1b[32m", red: "\x1b[31m" }
 
 run()
 
 function run() {
   console.clear()
-  panel(colors.cyan, app.name)
+  panel(colors.cyan, '🍺 Pub Quiz')
   runTests()
 }
 
 function runTests() {
   const mocha = new Mocha({ reporter: 'dot' })
-  fs.readdirSync('./test').forEach(function(file) {
-    mocha.addFile('./test/' + file)
-  })
+  fs.readdirSync('./test').forEach(file => mocha.addFile('./test/' + file))
   mocha.run(testsFinished)
 }
 
@@ -31,12 +30,21 @@ function testsFinished(failures) {
 }
 
 function testsPassed() {
-  const port = startServer()
-  panel(
-    colors.green,
-    `Tests passed in ${elapsed()}ms`,
-    `Server running at http://localhost:${port}`
-  )
+  if (argv.includes('--exit')) {
+    panel(
+      colors.green,
+      `Tests passed in ${elapsed()}ms`,
+      'Server not running'
+    )
+    process.exit(0)
+  } else {
+    const port = startServer()
+    panel(
+      colors.green,
+      `Tests passed in ${elapsed()}ms`,
+      `Server running at http://localhost:${port}`
+    )
+  }
 }
 
 function testsFailed(failures) {
