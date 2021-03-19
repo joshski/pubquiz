@@ -22,7 +22,7 @@ function runTests() {
 }
 
 function testsFinished(failures) {
-  if (failures == 0) {
+  if (failures === 0) {
     testsPassed()
   } else {
     testsFailed(failures)

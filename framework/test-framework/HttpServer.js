@@ -8,9 +8,9 @@ class TestServer {
   }
 
   static async start(app, fetch) {
-    const server = app.listen(0)
-    await once(server, 'listening')
-    return new TestServer(server, fetch)
+    const netServer = app.listen(0)
+    await once(netServer, 'listening')
+    return new TestServer(netServer, fetch)
   }
 
   async fetch(path, ...args) {
